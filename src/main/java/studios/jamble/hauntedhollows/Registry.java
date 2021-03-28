@@ -2,10 +2,10 @@ package studios.jamble.hauntedhollows;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import net.minecraft.command.impl.SummonCommand;
 import net.minecraft.entity.EntityClassification;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
+import net.minecraft.entity.monster.MonsterEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.WorldGenRegistries;
 import net.minecraft.world.gen.feature.NoFeatureConfig;
@@ -13,7 +13,6 @@ import net.minecraft.world.gen.feature.structure.Structure;
 import net.minecraft.world.gen.feature.template.IStructureProcessorType;
 import net.minecraft.world.gen.settings.DimensionStructuresSettings;
 import net.minecraft.world.gen.settings.StructureSeparationSettings;
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -41,11 +40,132 @@ public class Registry {
     public static final DeferredRegister<EntityType<?>> DEFERRED_ENTITY_TYPE = DeferredRegister.create(ForgeRegistries.ENTITIES, HauntedHollows.MODID);
 
     public static final RegistryObject<EntityType<Ghost>> WHITE_GHOST = DEFERRED_ENTITY_TYPE.register("white_ghost", () -> {
-        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.CREATURE)
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
                 .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
                 .build("white_ghost");
 
-        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes().create());
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(20.0D, 2.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> YELLOW_GHOST = DEFERRED_ENTITY_TYPE.register("yellow_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("yellow_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(25.0D, 3.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> RED_GHOST = DEFERRED_ENTITY_TYPE.register("red_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("red_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(35.0D, 5.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> ORANGE_GHOST = DEFERRED_ENTITY_TYPE.register("orange_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("orange_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(30.0D, 4.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> TEAL_GHOST = DEFERRED_ENTITY_TYPE.register("teal_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("teal_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(40.0D, 6.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> GREEN_GHOST = DEFERRED_ENTITY_TYPE.register("green_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("green_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(45.0D, 7.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> BLUE_GHOST = DEFERRED_ENTITY_TYPE.register("blue_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("blue_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(50.0D, 8.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> PINK_GHOST = DEFERRED_ENTITY_TYPE.register("pink_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("pink_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(55.0D, 9.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> PURPLE_GHOST = DEFERRED_ENTITY_TYPE.register("purple_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("purple_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(60.0D, 10.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> GREY_GHOST = DEFERRED_ENTITY_TYPE.register("grey_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("grey_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(65.0D, 11.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
+
+        return ghost;
+
+    });
+
+    public static final RegistryObject<EntityType<Ghost>> BLACK_GHOST = DEFERRED_ENTITY_TYPE.register("black_ghost", () -> {
+
+        EntityType<Ghost> ghost = EntityType.Builder.create(Ghost::new, EntityClassification.MONSTER)
+                .setTrackingRange(48).setUpdateInterval(3).size(EntityType.PLAYER.getWidth(), EntityType.PLAYER.getHeight())
+                .build("black_ghost");
+
+        GlobalEntityTypeAttributes.put(ghost, Ghost.registerAttributes(70.0D, 12.0D, 60.0D, 32.0D, 3.0D, 3.0D).create());
 
         return ghost;
 

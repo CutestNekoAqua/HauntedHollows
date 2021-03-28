@@ -19,10 +19,11 @@ import java.util.Random;
 
 public class Utils {
 
-    public static List<ResourceLocation> rooms = new ArrayList<>();
+    public static List<WeightedItem<ResourceLocation>> weightedrooms = new ArrayList<>();
+
     public static List<Offset> offsets = new ArrayList<>();
     public static List<String> biggies = new ArrayList<>();
-    public static List<String> loottables = new ArrayList<>();
+    public static List<WeightedItem<String>> loottables = new ArrayList<>();
 
     public static class Offset {
 
@@ -59,13 +60,27 @@ public class Utils {
         return x % 21 == 0 && z % 21 == 0;
     }
 
+    public static class WeightedItem<T> {
+        public final T object;
+        public final int weight;
+
+        public WeightedItem(T object, int weight) {
+            this.object = object;
+            this.weight = weight;
+        }
+    }
+
+
+
     public static void setupRooms() {
 
-        rooms.clear();
+        weightedrooms.clear();
 
-        for (int i = 1; i <= 60; i++) {
+        for (int i = 1; i <= 61; i++) {
 
-            rooms.add(new ResourceLocation("room" + i));
+            //rooms.add(new ResourceLocation("room" + i));
+
+            weightedrooms.add(new WeightedItem<>(new ResourceLocation("room" + i), getWeightForRoom(i)));
 
         }
 
@@ -75,18 +90,64 @@ public class Utils {
 
     }
 
+    private static int getWeightForRoom(int number) {
+
+        switch (number) {
+            case 5:
+            case 33:
+            case 28:
+                return 5;
+            case 7:
+            case 11:
+            case 8:
+            case 9:
+            case 10:
+            case 24:
+            case 12:
+            case 49:
+            case 50:
+            case 13:
+                return 10;
+            case 53:
+            case 52:
+            case 3:
+                return 30;
+        }
+
+        return 50;
+
+    }
+
     public static void setupLoottables() {
 
-        loottables.add("chests/end_city_treasure");
-        loottables.add("chests/abandoned_mineshaft");
-        loottables.add("chests/bastion_bridge");
-        loottables.add("chests/bastion_hoglin_stable");
-        loottables.add("chests/bastion_treasure");
-        loottables.add("chests/bastion_other");
-        loottables.add("chests/ruined_portal");
-        loottables.add("chests/woodland_mansion");
-        loottables.add("chests/igloo_chest");
-        loottables.add("chests/jungle_temple");
+        loottables.add(new WeightedItem<>("chests/end_city_treasure", 20));
+        loottables.add(new WeightedItem<>("chests/abandoned_mineshaft", 40));
+        loottables.add(new WeightedItem<>("chests/bastion_bridge", 15));
+        loottables.add(new WeightedItem<>("chests/bastion_hoglin_stable", 15));
+        loottables.add(new WeightedItem<>("chests/bastion_treasure", 10));
+        loottables.add(new WeightedItem<>("chests/bastion_other", 20));
+        loottables.add(new WeightedItem<>("chests/ruined_portal", 40));
+        loottables.add(new WeightedItem<>("chests/woodland_mansion", 30));
+        loottables.add(new WeightedItem<>("chests/igloo_chest", 40));
+        loottables.add(new WeightedItem<>("chests/jungle_temple", 30));
+        loottables.add(new WeightedItem<>("chests/desert_pyramid", 30));
+
+        loottables.add(new WeightedItem<>("chests/village/village_armorer", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_butcher", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_cartographer", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_mason", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_shepherd", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_tannery", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_weaponsmith", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_desert_house", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_plains_house", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_savanna_house", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_snowy_house", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_taiga_house", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_fisher", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_fletcher", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_temple", 30));
+        loottables.add(new WeightedItem<>("chests/village/village_toolsmith", 30));
 
     }
 
@@ -100,8 +161,21 @@ public class Utils {
 
     public static String getLootTable() {
 
-        Random r = new Random();
-        return loottables.get(r.nextInt(loottables.size()));
+        // Compute the total weight of all items together.
+        // This can be skipped of course if sum is already 1.
+        double totalWeight = 0.0;
+        for (Utils.WeightedItem i : loottables) {
+            totalWeight += i.weight;
+        }
+
+        // Now choose a random item.
+        int idx = 0;
+        for (double r = Math.random() * totalWeight; idx < loottables.size() - 1; ++idx) {
+            r -= loottables.get(idx).weight;
+            if (r <= 0.0) break;
+        }
+
+        return Utils.loottables.get(idx).object;
 
     }
 
@@ -129,7 +203,7 @@ public class Utils {
     public static boolean shouldGenRoof() {
         Random random = new Random();
 
-        if(random.nextInt(100) < 15) {
+        if(random.nextInt(100) > 97) {
 
             return true;
 
@@ -141,7 +215,7 @@ public class Utils {
     public static BlockPos moveRoofRandom(BlockPos pos) {
 
         Random random = new Random();
-        return pos.add(random.nextInt(20) - 10, 0 , random.nextInt(20) - 10);
+        return pos.add(random.nextInt(5) - 2, 0 , random.nextInt(5) - 2);
 
     }
 

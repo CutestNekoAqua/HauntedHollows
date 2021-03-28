@@ -11,8 +11,10 @@ import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.tileentity.StructureBlockTileEntity;
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.MobSpawnInfo;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.FlatChunkGenerator;
 import net.minecraft.world.gen.feature.structure.Structure;
@@ -23,6 +25,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.BiomeLoadingEvent;
+import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -46,7 +49,7 @@ import studios.jamble.hauntedhollows.structures.ConfiguredStructures;
 import java.lang.reflect.Method;
 import java.util.*;
 
-import static studios.jamble.hauntedhollows.Registry.WHITE_GHOST;
+import static studios.jamble.hauntedhollows.Registry.*;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(HauntedHollows.MODID)
@@ -201,7 +204,29 @@ public class HauntedHollows {
         // do something that can only be done on the client
         //LOGGER.info("Got game settings {}", event.getMinecraftSupplier().get().gameSettings);
 
-        RenderingRegistry.registerEntityRenderingHandler(WHITE_GHOST.get(), RenderGhost::new);
+        EntityType<Ghost> white_ghost = WHITE_GHOST.get();
+        EntityType<Ghost> yellow_ghost = YELLOW_GHOST.get();
+        EntityType<Ghost> orange_ghost = ORANGE_GHOST.get();
+        EntityType<Ghost> red_ghost = RED_GHOST.get();
+        EntityType<Ghost> purple_ghost = PURPLE_GHOST.get();
+        EntityType<Ghost> pink_ghost = PINK_GHOST.get();
+        EntityType<Ghost> teal_ghost = TEAL_GHOST.get();
+        EntityType<Ghost> black_ghost = BLACK_GHOST.get();
+        EntityType<Ghost> blue_ghost = BLUE_GHOST.get();
+        EntityType<Ghost> green_ghost = GREEN_GHOST.get();
+        EntityType<Ghost> grey_ghost = GREY_GHOST.get();
+
+        RenderingRegistry.registerEntityRenderingHandler(white_ghost, manager -> new RenderGhost(manager, "white_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(yellow_ghost, manager -> new RenderGhost(manager, "yellow_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(orange_ghost, manager -> new RenderGhost(manager, "orange_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(red_ghost, manager -> new RenderGhost(manager, "red_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(purple_ghost, manager -> new RenderGhost(manager, "purple_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(pink_ghost, manager -> new RenderGhost(manager, "pink_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(teal_ghost, manager -> new RenderGhost(manager, "teal_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(black_ghost, manager -> new RenderGhost(manager, "black_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(blue_ghost, manager -> new RenderGhost(manager, "blue_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(green_ghost, manager -> new RenderGhost(manager, "green_ghost"));
+        RenderingRegistry.registerEntityRenderingHandler(grey_ghost, manager -> new RenderGhost(manager, "grey_ghost"));
 
         System.out.println("White Ghost registered");
 
@@ -231,6 +256,40 @@ public class HauntedHollows {
         Utils.setupRooms();
     }
 
+    @SubscribeEvent(priority = EventPriority.HIGH)
+    public void onBiomeLoadingEvent(BiomeLoadingEvent event) {
+        List<MobSpawnInfo.Spawners> spawns =
+                event.getSpawns().getSpawner(EntityClassification.MONSTER);
+
+        spawns.clear();
+
+        // Make Enderman spawns more frequent and add Blaze spawns in all biomes
+        spawns.add(new MobSpawnInfo.Spawners(BLACK_GHOST.get(), 1, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(BLUE_GHOST.get(), 2, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(GREY_GHOST.get(), 3, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(GREEN_GHOST.get(), 4, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(ORANGE_GHOST.get(), 9, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(PINK_GHOST.get(), 5, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(PURPLE_GHOST.get(), 6, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(RED_GHOST.get(), 8, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(TEAL_GHOST.get(), 7, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(WHITE_GHOST.get(), 11, 1, 1));
+        spawns.add(new MobSpawnInfo.Spawners(YELLOW_GHOST.get(), 10, 1, 1));
+    }
+
+    @SubscribeEvent
+    public void onBreakStuff(BlockEvent.BreakEvent event) {
+        // do something when the server starts
+        //LOGGER.info("HELLO from server starting");
+
+        BlockPos pos = event.getPos();
+
+        if(pos.getY() < 129 || pos.getY() > 136) {
+            event.setCanceled(true);
+        }
+
+    }
+
     @SubscribeEvent
     public void onPlayerJoin(EntityJoinWorldEvent event) {
         Entity entity = event.getEntity();
@@ -248,7 +307,7 @@ public class HauntedHollows {
 
                     }
                 };
-                t.schedule(tt, new Date(System.currentTimeMillis()));
+                t.schedule(tt, new Date(System.currentTimeMillis() + 100));
             } else {
                 HauntedHollows.LOGGER.info("Not in vanilla dimension! " + event.getWorld().getDimensionKey().toString());
             }

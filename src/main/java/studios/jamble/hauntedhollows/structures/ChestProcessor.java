@@ -23,7 +23,7 @@ public class ChestProcessor extends StructureProcessor {
 
     @Override
     public Template.BlockInfo process(IWorldReader worldView, BlockPos pos, BlockPos blockPos, Template.BlockInfo structureBlockInfoLocal, Template.BlockInfo structureBlockInfoWorld, PlacementSettings structurePlacementData, Template template) {
-        if (structureBlockInfoWorld.state.matchesBlock(Blocks.CHEST)) {
+        if (structureBlockInfoWorld.state.matchesBlock(Blocks.CHEST) || structureBlockInfoWorld.state.matchesBlock(Blocks.BARREL)) {
 
             String loottable = null;
 
@@ -39,13 +39,13 @@ public class ChestProcessor extends StructureProcessor {
 
                 structureBlockInfoWorld.nbt.putString("LootTable", loottable);
 
-                System.out.println("Put loottable to " + loottable + " at " + pos + "and "+ blockPos);
+                //System.out.println("Put loottable to " + loottable + " at " + pos + "and "+ blockPos);
 
                 }
 
             }
 
-            System.out.println("Already has loottable " + loottable + " at " + pos + "and "+ blockPos);
+            //System.out.println("Already has loottable " + loottable + " at " + pos + "and "+ blockPos);
 
             //worldView.getChunk(structureBlockInfoWorld.pos).setBlockState(structureBlockInfoWorld.pos, Blocks.AIR.getDefaultState(), false);
         }

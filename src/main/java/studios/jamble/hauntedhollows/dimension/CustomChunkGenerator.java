@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Random;
 
+import static studios.jamble.hauntedhollows.Utils.weightedrooms;
+
 public class CustomChunkGenerator extends ChunkGenerator {
 
     public static void registerChunkgenerator() {
@@ -122,8 +124,21 @@ public class CustomChunkGenerator extends ChunkGenerator {
 
     public ResourceLocation getRoom() {
 
-        Random rand = new Random();
-        return Utils.rooms.get(rand.nextInt(Utils.rooms.size()));
+        // Compute the total weight of all items together.
+        // This can be skipped of course if sum is already 1.
+        double totalWeight = 0.0;
+        for (Utils.WeightedItem i : weightedrooms) {
+            totalWeight += i.weight;
+        }
+
+        // Now choose a random item.
+        int idx = 0;
+        for (double r = Math.random() * totalWeight; idx < weightedrooms.size() - 1; ++idx) {
+            r -= weightedrooms.get(idx).weight;
+            if (r <= 0.0) break;
+        }
+
+        return Utils.weightedrooms.get(idx).object;
 
     }
 
